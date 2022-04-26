@@ -1,0 +1,8 @@
+buildfile	\Eric\Main\NetHub\BuildProj.bat
+executablefile	\Eric\Main\NetHub\main.exe
+projectdirectory	\Eric\Main\NetHub
+recentfile1	\Eric\Main\NetHub\MainApp.h
+recentfile2	\Eric\Main\NetHub\MainApp.cpp
+recentfile3	\Eric\Main\CppBase\SocketsNet.h
+recentfile4	\Eric\Main\CppBase\SocketsNet.cpp
+recentfile5	\Eric\Main\Docs\Notes.txt
