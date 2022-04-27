@@ -3,6 +3,31 @@ executablefile	\Eric\Main\NetHub\main.exe
 projectdirectory	\Eric\Main\NetHub
 recentfile1	\Eric\Main\NetHub\MainApp.h
 recentfile2	\Eric\Main\NetHub\MainApp.cpp
-recentfile3	\Eric\Main\CppBase\SocketsNet.h
-recentfile4	\Eric\Main\CppBase\SocketsNet.cpp
-recentfile5	\Eric\Main\Docs\Notes.txt
+recentfile3	\Eric\Main\NetHub\SocketClient.h
+recentfile4	\Eric\Main\NetHub\BuildProj.bat
+recentfile5	\Eric\Main\NetHub\SocketClient.cpp
+recentfile6	\Eric\Main\NetHub\SocketsNet.h
+recentfile7	\Eric\Main\NetHub\SocketsNet.cpp
+recentfile8	
+recentfile9	
+recentfile10	
+recentfile11	
+recentfile12	
+recentfile13	
+recentfile14	
+recentfile15	
+recentfile16	
+recentfile17	
+recentfile18	
+recentfile19	
+recentfile20	
+recentfile21	
+recentfile22	
+recentfile23	
+recentfile24	
+recentfile25	
+recentfile26	
+recentfile27	
+recentfile28	
+recentfile29	
+recentfile30	

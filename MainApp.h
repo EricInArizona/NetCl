@@ -1,6 +1,12 @@
 // Copyright Eric Chauvin 2021 - 2022.
 
 
+// This is licensed under the GNU General
+// Public License (GPL).  It is the
+// same license that Linux has.
+// https://www.gnu.org/licenses/gpl-3.0.html
+
+
 /*
 To Do:
 
@@ -55,8 +61,8 @@ extern __pid_t fork (void) __THROWNL;
 // #include statements.
 
 
-#include "../LinuxApi/BasicTypes.h"
-#include "../LinuxApi/FileIO.h"
+#include "../CppBase/BasicTypes.h"
+#include "../CppBase/FileIO.h"
 
 
 
@@ -68,7 +74,7 @@ class MainApp
   public:
   inline static const char* getVersionStr( void )
     {
-    return "4/26/2022";
+    return "4/27/2022";
     }
 
   // Int32 mainLoop( Int32 argc, char* argv[] );

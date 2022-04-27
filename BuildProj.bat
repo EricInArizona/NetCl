@@ -28,7 +28,9 @@ rem -Ofast
 rem Check MainApp.cpp to see where the exeout
 rem file it going to.
 
-C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\LinuxApi\*.cpp -o main.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lwsock32.lib 2> Build.log
+rem \Eric\Main\LinuxApi\*.cpp
+
+C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp -o main.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lwsock32.lib 2> Build.log
 
 
 rem https://docs.microsoft.com/en-us/cpp/build/reference/stack-stack-allocations?view=msvc-160

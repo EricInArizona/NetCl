@@ -1,12 +1,17 @@
 // Copyright Eric Chauvin, 2021 - 2022.
 
 
+// This is licensed under the GNU General
+// Public License (GPL).  It is the
+// same license that Linux has.
+// https://www.gnu.org/licenses/gpl-3.0.html
 
-#include "../LinuxApi/StIO.h"
-#include "../LinuxApi/Str.h"
+
+#include "../CppBase/StIO.h"
+#include "../CppBase/Str.h"
 // #include "../LinuxApi/SetStack.h"
-#include "../LinuxApi/Casting.h"
-#include "../LinuxApi/Threads.h"
+#include "../CppBase/Casting.h"
+#include "../CppBase/Threads.h"
 // #include "../LinuxApi/Signals.h"
 
 
