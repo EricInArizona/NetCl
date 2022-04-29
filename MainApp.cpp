@@ -12,10 +12,24 @@
 // #include "../LinuxApi/SetStack.h"
 #include "../CppBase/Casting.h"
 #include "../CppBase/Threads.h"
+#include "../WinApi/Signals.h"
 // #include "../LinuxApi/Signals.h"
 
 
+
 #include "MainApp.h"
+
+
+// extern volatile Int32 gotSigFpe;
+
+/*
+void MainApp::checkSignals( void )
+{
+if( gotSigFpe > 0 )
+  throw "gotSigFpe > 0";
+
+}
+*/
 
 
 
@@ -24,7 +38,7 @@ int MainApp::mainLoop( void )
 {
 Int32 delay = 200; // milliseconds.
 const char* outFile =
-               "\\Eric\\Main\\NetHub\\ExeOut.txt";
+               "\\Eric\\Main\\NetEC\\ExeOut.txt";
 
 try
 {
@@ -50,10 +64,10 @@ mainIO.appendChars( "\n\n" );
 // mainIO.appendStr( showS );
 // mainIO.appendChars( "\n\n" );
 
-// Signals::setupControlCSignal();
-// Signals::setupFpeSignal();
-// Signals::setupIllegalOpSignal();
-// Signals::setupBadMemSignal();
+Signals::setupControlCSignal();
+Signals::setupFpeSignal();
+Signals::setupIllegalOpSignal();
+Signals::setupBadMemSignal();
 
 
 mainIO.appendChars( "End of main app.\n" );
