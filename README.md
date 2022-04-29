@@ -1,2 +1,2 @@
-# NetHub
+# NetEC
 Networking with Sockets.
