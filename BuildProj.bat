@@ -2,7 +2,7 @@
 
 rem 1> is standard out and 2> is standard error.
 
-cd \Eric\Main\NetHub
+cd \Eric\Main\NetEC
 
 rem @CommandLine.txt
 rem Use -v to see how it gets called.
@@ -26,11 +26,11 @@ rem -Wno-old-style-cast
 rem -Ofast
 
 rem Check MainApp.cpp to see where the exeout
-rem file it going to.
+rem file is going to.
 
 rem \Eric\Main\LinuxApi\*.cpp
 
-C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp -o main.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lwsock32.lib 2> Build.log
+C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\CryptoBase\*.cpp \Eric\Main\WinApi\*.cpp -o NetEC.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lwsock32.lib 2> Build.log
 
 
 rem https://docs.microsoft.com/en-us/cpp/build/reference/stack-stack-allocations?view=msvc-160
@@ -40,8 +40,6 @@ rem Tell the linker to use this max stack size.
 rem -Wl,-STACK:10000000
 rem -Wl,"-stack_size 0x100000"
 rem On Windows, clang calls link.exe.
-rem "For ARM, x86 and x64 machines, the default
-rem stack size is 1 MB."
 
 rem -Wl,<arg>
 rem Pass the comma separated arguments in
