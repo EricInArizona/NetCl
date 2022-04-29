@@ -30,7 +30,9 @@ rem file is going to.
 
 rem \Eric\Main\LinuxApi\*.cpp
 
-C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\CryptoBase\*.cpp \Eric\Main\WinApi\*.cpp -o NetEC.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lwsock32.lib 2> Build.log
+rem -lWs2_32.lib
+rem -lwsock32.lib
+C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\CryptoBase\*.cpp \Eric\Main\WinApi\*.cpp -o NetEC.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lWs2_32.lib 2> Build.log
 
 
 rem https://docs.microsoft.com/en-us/cpp/build/reference/stack-stack-allocations?view=msvc-160

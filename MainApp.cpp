@@ -14,6 +14,7 @@
 #include "../CppBase/Threads.h"
 #include "../WinApi/Signals.h"
 // #include "../LinuxApi/Signals.h"
+#include "SocketsWin.h"
 
 
 
@@ -70,6 +71,9 @@ Signals::setupIllegalOpSignal();
 Signals::setupBadMemSignal();
 
 
+testSockets();
+
+
 mainIO.appendChars( "End of main app.\n" );
 
 //             mainIO.readAll( fileName );
@@ -101,4 +105,11 @@ catch( ... )
   Threads::sleep( delay );
   return 1;
   }
+}
+
+
+void MainApp::testSockets( void )
+{
+SocketsWin sock;
+
 }

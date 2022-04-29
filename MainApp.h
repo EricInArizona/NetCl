@@ -34,5 +34,6 @@ class MainApp
 
   // Int32 mainLoop( Int32 argc, char* argv[] );
   Int32 mainLoop( void );
+  void testSockets( void );
 
   };
