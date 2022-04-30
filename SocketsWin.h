@@ -13,8 +13,8 @@
 
 // This is not in the WinAPI directory because
 // I don't want to have to link other programs
-// to the Windows sockets library wsock32.lib.
-
+// that use WinApi to the Windows sockets
+// library Ws2_32.lib.
 
 // A good tutorial:
 // https://beej.us/guide/bgnet/html/
@@ -24,25 +24,8 @@
 
 
 
-// "try to use getaddrinfo() to get all the
-// struct sockaddr info, instead of packing the
-// structures by hand. This will keep you IP
-// version-agnostic, and will eliminate many of
-// the subsequent steps."
-
-// === Got to:
-// 5 System Calls or Bust
-
-
-
-// Port 443 for https.
-
-// htons() host to network short
-// htonl() host to network long
-// ntohs() network to host short
-// ntohl() network to host long
-
 #include "../CppBase/BasicTypes.h"
+#include "../CppBase/CharBuf.h"
 // #include "../CppBase/Str.h"
 // #include "../CppBase/RangeC.h"
 
@@ -51,6 +34,9 @@ class SocketsWin
   {
   private:
   Int32 testForCopy = 123;
+  // Statistical data is kept here.
+  // And error data.
+  // And hacking attempt data.
 
   public:
   SocketsWin( void );
@@ -58,7 +44,17 @@ class SocketsWin
   ~SocketsWin( void );
   void closeSocket( Uint64 toClose );
   // void getAddressInfo( void );
-  Uint64 openClient( void );
 
+  Uint64 openClient( const char* domain,
+                     const char* port,
+                     CharBuf& errorBuf );
+
+  Int32 sendBuf( const Uint64 sendToSock,
+                 const CharBuf& sendBuf,
+                 CharBuf& errorBuf );
+
+  bool receiveBuf( const Uint64 recSock,
+                   CharBuf& recCharBuf,
+                   CharBuf& errorBuf );
 
   };

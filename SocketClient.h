@@ -12,9 +12,6 @@
 #pragma once
 
 
-
-
-
 // This file has a lot of notes on the bottom from
 // my old C# stuff.
 // Things on my ToDo list.

@@ -9,18 +9,34 @@
 
 
 #include "SocketsWin.h"
+#include "../CppBase/Casting.h"
 
-// If you need to include the Windows.h file then
-// you should define
+
+// I hate to have to put a #define statement
+// into any of my code.  But if you need to
+// include the Windows.h file then
+// you have to define
 //     #define WIN32_LEAN_AND_MEAN
 // So that it doesn't include winsock.h.
+// And of course this would only be done in
+// a .cpp file and not a header file
 // #include <windows.h>
+
+// #include <stdio.h>
 
 
 // For Windows.
 // #include <winsock.h>
 #include <WinSock2.h>
-#include <WS2tcpip.h>
+#include <WS2tcpip.h> // getaddrinfo()
+
+// Need to link with Ws2_32.lib,
+// Mswsock.lib,
+// and Advapi32.lib ?
+
+// #pragma comment (lib, "Ws2_32.lib")
+// #pragma comment (lib, "Mswsock.lib")
+// #pragma comment (lib, "AdvApi32.lib")
 
 
 // For Linux.
@@ -33,12 +49,10 @@
 SocketsWin::SocketsWin( void )
 {
 // See BuildProj.bat for how to link to the
-// wsock32.lib file.
-// -lwsock32.lib
+// Windows .lib file.
 
 // For Windows.
 WSADATA wsaData;
-
 
 // MAKEWORD(1,1) for Winsock 1.1,
 // MAKEWORD(2,0) for Winsock 2.0:
@@ -70,8 +84,6 @@ SocketsWin::~SocketsWin( void )
 {
 // For Windows.
 WSACleanup();
-
-// delete[] cArray;
 }
 
 
@@ -81,14 +93,22 @@ void SocketsWin::closeSocket( Uint64 toClose )
 // For Windows.
 // returns zero on no error.
 
+//    iResult = shutdown(ConnectSocket, SD_SEND);
+
 closesocket( toClose );
 // Linux uses close();
 }
 
 
 
-Uint64 SocketsWin::openClient( void )
+Uint64 SocketsWin::openClient( const char* domain,
+                               const char* port,
+                               CharBuf& errorBuf )
 {
+// result is a linked list.
+// In Linux is it a pointer to a pointer?
+// const struct addrinfo** result;
+
 struct addrinfo* result = nullptr;
 struct addrinfo* ptr = nullptr;
 struct addrinfo hints;
@@ -96,205 +116,212 @@ struct addrinfo hints;
 // memset( &hints, 0, sizeof( hints ));
 ZeroMemory( &hints, sizeof(hints) );
 
-// It's unspecified so it's either IPV4 or IPV6
-// or something else.
+// It's unspecified so it's either IPV4 or IPV6.
 
 hints.ai_family = AF_UNSPEC;
 
 hints.ai_socktype = SOCK_STREAM;
 hints.ai_protocol = IPPROTO_TCP;
 
+// Port 443 for https.
+
+// htons() host to network short
+// htonl() host to network long
+// ntohs() network to host short
+// ntohl() network to host long
+
+// If it's a server use nullptr for the domain?
 
 Int32 status = getaddrinfo(
-             "www.durangoherald.com", // get news
-             "https",
-             &hints,
-             &result );
+              domain, // "www.thedomain.com"
+              port, // "443" "https", "ftp", etc.
+              &hints,
+              &result );
 
 if( status != 0 )
-  throw "getaddrinfo didn't work.";
+  {
+  errorBuf.appendChars(
+               "SocketWin getaddrinfo error.\n" );
+  return 0;
+  }
 
-SOCKET ConnectSocket = INVALID_SOCKET;
+// SOCKET clientSocket = INVALID_SOCKET;
+Uint64 clientSocket = INVALID_SOCKET;
 
-ptr = result;
-ConnectSocket = socket( ptr->ai_family,
-                        ptr->ai_socktype,
-                        ptr->ai_protocol );
-
-return 0;
-}
-
-
-
-/*
-void SocketsNet::getAddressInfo( void )
-{
-// node is the domain or IP address string.
-// "www.thisdomain.com" or "123.456.789.123".
-// service is like "https" or a port number
-// string like "443".
-// results is a linked list.
-
-// getaddrinfo( const char* node,
-//              const char* service,
-//              const struct addrinfo* hints,
-//              const struct addrinfo** results );
-
-// If it's a server use nullptr for the domain.
-
-struct addrinfo hints;
-struct addrinfo* results = nullptr;
-
-memset( &hints, 0, sizeof( hints ));
-
-// It's unspecified so it's either IPV4 or IPV6
-// or something else.
-hints.ai_family = AF_UNSPEC;
-// In Linux is results a pointer to a pointer?
-// Not a pointer?
-Int32 status = getaddrinfo(
-             "www.durangoherald.com", // get news
-             "https",
-             &hints,
-             &results );
-
-if( status != 0 )
-  throw "getaddrinfo error.";
-
-}
-*/
-
-
-
-
-
-
-/*
-==========================
-#define WIN32_LEAN_AND_MEAN
-
-#include <windows.h>
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-
-// Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
-#pragma comment (lib, "Ws2_32.lib")
-#pragma comment (lib, "Mswsock.lib")
-#pragma comment (lib, "AdvApi32.lib")
-
-
-#define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"
-
-int __cdecl main(int argc, char **argv)
-{
-    WSADATA wsaData;
-    SOCKET ConnectSocket = INVALID_SOCKET;
-    struct addrinfo *result = NULL,
-                    *ptr = NULL,
-                    hints;
-    const char *sendbuf = "this is a test";
-    char recvbuf[DEFAULT_BUFLEN];
-    int iResult;
-    int recvbuflen = DEFAULT_BUFLEN;
-
-    // Validate the parameters
-    if (argc != 2) {
-        printf("usage: %s server-name\n", argv[0]);
-        return 1;
-    }
-
-    // Initialize Winsock
-    iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
-    if (iResult != 0) {
-        printf("WSAStartup failed with error: %d\n", iResult);
-        return 1;
-    }
-
-    ZeroMemory( &hints, sizeof(hints) );
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
-
-    // Resolve the server address and port
-    iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
-    if ( iResult != 0 ) {
-        printf("getaddrinfo failed with error: %d\n", iResult);
-        WSACleanup();
-        return 1;
-    }
-
-    // Attempt to connect to an address until one succeeds
-    for(ptr=result; ptr != NULL ;ptr=ptr->ai_next) {
-
-        // Create a SOCKET for connecting to server
-        ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
-            ptr->ai_protocol);
-        if (ConnectSocket == INVALID_SOCKET) {
-            printf("socket failed with error: %ld\n", WSAGetLastError());
-            WSACleanup();
-            return 1;
-        }
-
-        // Connect to server.
-        iResult = connect( ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
-        if (iResult == SOCKET_ERROR) {
-            closesocket(ConnectSocket);
-            ConnectSocket = INVALID_SOCKET;
-            continue;
-        }
-        break;
-    }
-
-    freeaddrinfo(result);
-
-    if (ConnectSocket == INVALID_SOCKET) {
-        printf("Unable to connect to server!\n");
-        WSACleanup();
-        return 1;
-    }
-
-    // Send an initial buffer
-    iResult = send( ConnectSocket, sendbuf, (int)strlen(sendbuf), 0 );
-    if (iResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return 1;
-    }
-
-    printf("Bytes Sent: %ld\n", iResult);
-
-    // shutdown the connection since no more data will be sent
-    iResult = shutdown(ConnectSocket, SD_SEND);
-    if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return 1;
-    }
-
-    // Receive until the peer closes the connection
-    do {
-
-        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-        if ( iResult > 0 )
-            printf("Bytes received: %d\n", iResult);
-        else if ( iResult == 0 )
-            printf("Connection closed\n");
-        else
-            printf("recv failed with error: %d\n", WSAGetLastError());
-
-    } while( iResult > 0 );
-
-    // cleanup
-    closesocket(ConnectSocket);
-    WSACleanup();
+// Try the possible connections.
+Int32 count = 0;
+for( ptr = result; ptr != nullptr;
+                              ptr = ptr->ai_next )
+  {
+  // Make sure nothing is really-bad wrong here.
+  count++;
+  if( count > 5 )
+    {
+    errorBuf.appendChars(
+     "SocketWin too many sockets for connect.\n" );
 
     return 0;
+    }
+
+  clientSocket = socket( ptr->ai_family,
+                          ptr->ai_socktype,
+                          ptr->ai_protocol );
+
+  if( clientSocket == INVALID_SOCKET )
+    {
+    errorBuf.appendChars(
+      "SocketWin no sockets left for connect.\n" );
+
+    // WSAGetLastError());
+    return 0;
+    }
+
+  Int32 connectResult = connect( clientSocket,
+                         ptr->ai_addr,
+                         Casting::U64ToI32(
+                         ptr->ai_addrlen ));
+
+  if( connectResult == SOCKET_ERROR )
+    {
+    errorBuf.appendChars(
+      "SocketWin trying the next socket.\n" );
+
+    closesocket( clientSocket );
+    clientSocket = INVALID_SOCKET;
+    continue; // Try to connect to the next
+              // valid socket.
+    }
+
+  // It should have a good connected socket.
+  break;
+  }
+
+errorBuf.appendChars(
+        "SocketWin connected to " );
+errorBuf.appendChars( domain );
+errorBuf.appendChars( "\n" );
+
+freeaddrinfo( result );
+
+// Make it non blocking.  0 is blocking.
+// Non zero is non blocking.
+// Uint32L iMode = 1;
+
+// setsockopt()
+
+// for Linux:
+// #include <unistd.h>
+// #include <fcntl.h>
+// sockfd = socket(PF_INET, SOCK_STREAM, 0);
+// fcntl(sockfd, F_SETFL, O_NONBLOCK);
+
+// Windows doesn't support this.
+// Because it's always non blocking?
+// Int32 ioResult = ioctlsocket( clientSocket,
+//                    Casting::u32ToI32( FIONBIO ),
+//                    &iMode );
+
+//  Int32 error = WSAGetLastError();
+// errorBuf.appendChars(
+//               "socket ioctl failed.\n" );
+//   errorBuf.appendChars( "Error is: " );
+//  Str errorS( error );
+//  errorBuf.appendStr( errorS );
+//  errorBuf.appendChars( "\n" );
+
+return clientSocket;
 }
 
-*/
+
+
+Int32 SocketsWin::sendBuf(
+                   const Uint64 sendToSock,
+                   const CharBuf& sendBuf,
+                   CharBuf& errorBuf )
+{
+if( sendToSock == 0 )
+  {
+  errorBuf.appendChars(
+   "SocketsWin sendBuf() sendToSock is zero.\n" );
+
+  return -1;
+  }
+
+const Int32 howMany = sendBuf.getLast();
+Int32 result = send( sendToSock,
+                     sendBuf.getBufPoint(),
+                     howMany,
+                     0 );
+
+if( result == SOCKET_ERROR )
+  {
+  errorBuf.appendChars(
+             "SocketsWin sendBuf() error.\n" );
+  // WSAGetLastError());
+  closesocket( sendToSock );
+  return -1;
+  }
+
+// How many did it actually send?
+return result;
+}
+
+
+
+bool SocketsWin::receiveBuf(
+                   const Uint64 recSock,
+                   CharBuf& recCharBuf,
+                   CharBuf& errorBuf )
+{
+// poll() or
+// select()
+
+if( recSock == 0 )
+  {
+  errorBuf.appendChars(
+   "SocketsWin receiveBuf() recSock is zero.\n" );
+
+  return false;
+  }
+
+const Int32 bufLen = 1024 * 32;
+// On the stack.
+
+char recBuf[bufLen];
+
+// Keep reading for a reasonable length of time.
+for( Int32 loops = 0; loops < 2; loops++ )
+  {
+  Int32 result = recv( recSock, recBuf,
+                       bufLen, 0 );
+
+  if( result == 0 )
+    {
+    // The connection was _gracefully_ closed.
+    errorBuf.appendChars(
+            "receiveBuf() connection closed.\n" );
+
+    return false;
+    }
+
+  if( result < 0 )
+    {
+    // EAGAIN or EWOULDBLOCK
+
+    Int32 error = WSAGetLastError();
+    errorBuf.appendChars( "socket recv error is: " );
+    Str errorS( error );
+    errorBuf.appendStr( errorS );
+    errorBuf.appendChars( "\n" );
+
+    // This might just be saying it would block.
+    return false;
+    }
+
+  for( Int32 count = 0; count < result; count++ )
+    recCharBuf.appendChar( recBuf[count] );
+
+  }
+
+return true;
+}
