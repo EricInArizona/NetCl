@@ -14,7 +14,6 @@
 #include "../CppBase/Threads.h"
 #include "../WinApi/Signals.h"
 // #include "../LinuxApi/Signals.h"
-#include "SocketsWin.h"
 
 
 
@@ -110,6 +109,24 @@ catch( ... )
 
 void MainApp::testSockets( void )
 {
-SocketsWin sock;
+// get some news for a test.
 
+CharBuf showBuf;
+Uint64 testSocket = socketsWin.openClient(
+                     "www.durangoherald.com",
+                     "443", showBuf );
+if( testSocket == 0 )
+  {
+  mainIO.appendCharBuf( showBuf );
+  mainIO.appendChars(
+              "openClient returned zero.\n" );
+
+  return;
+  }
+
+mainIO.appendChars( "Opened a client socket.\n" );
+mainIO.appendCharBuf( showBuf );
+
+socketsWin.closeSocket( testSocket );
+mainIO.appendChars( "Closed client socket.\n" );
 }
