@@ -112,6 +112,8 @@ void MainApp::testSockets( void )
 // get some news for a test.
 
 CharBuf showBuf;
+
+/*
 Uint64 testSocket = socketsWin.openClient(
                      "www.durangoherald.com",
                      "443", showBuf );
@@ -123,8 +125,21 @@ if( testSocket == 0 )
 
   return;
   }
+*/
 
-mainIO.appendChars( "Opened a client socket.\n" );
+Uint64 testSocket = socketsWin.openServer(
+                            "443", showBuf );
+if( testSocket == 0 )
+  {
+  mainIO.appendCharBuf( showBuf );
+  mainIO.appendChars(
+              "openServer returned zero.\n" );
+
+  return;
+  }
+
+
+mainIO.appendChars( "Opened a socket.\n" );
 mainIO.appendCharBuf( showBuf );
 
 socketsWin.closeSocket( testSocket );

@@ -1,9 +1,8 @@
 Programming by Eric Chauvin.
-Version date: 4/30/2022
+Version date: 5/10/2022
 
-SocketWin connected to www.durangoherald.com
-ioctl result: -1
-socket ioctl failed.
-Error is: 10045
-openClient returned zero.
+Opened a socket.
+Before opening socket.
+SocketWin server got socket.
+Closed client socket.
 End of main app.
