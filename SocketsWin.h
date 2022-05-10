@@ -11,11 +11,6 @@
 #pragma once
 
 
-// This is not in the WinAPI directory because
-// I don't want to have to link other programs
-// that use WinApi to the Windows sockets
-// library Ws2_32.lib.
-
 // A good tutorial:
 // https://beej.us/guide/bgnet/html/
 
@@ -34,9 +29,14 @@ class SocketsWin
   {
   private:
   Int32 testForCopy = 123;
+  // Since this is global to the software, it
+  // stays running the whole time the software
+  // is running.
+  // Need Config files.
   // Statistical data is kept here.
   // And error data.
   // And hacking attempt data.
+  // Keep IP addresses to not allow here.
 
   public:
   SocketsWin( void );
@@ -47,6 +47,9 @@ class SocketsWin
 
   Uint64 openClient( const char* domain,
                      const char* port,
+                     CharBuf& errorBuf );
+
+  Uint64 openServer( const char* port,
                      CharBuf& errorBuf );
 
   Int32 sendBuf( const Uint64 sendToSock,
