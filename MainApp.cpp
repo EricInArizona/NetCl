@@ -139,9 +139,18 @@ if( testSocket == 0 )
   }
 
 
+SocketCpp newConn = SocketsWin::acceptConnect(
+                         testSocket,
+                         showBuf );
+
+if( newConn == 0 )
+  {
+  mainIO.appendChars( "Did not accept a socket.\n" );
+  }
+
 mainIO.appendChars( "Opened a socket.\n" );
 mainIO.appendCharBuf( showBuf );
 
 socketsWin.closeSocket( testSocket );
-mainIO.appendChars( "Closed client socket.\n" );
+mainIO.appendChars( "Closed test socket.\n" );
 }
