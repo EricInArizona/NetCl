@@ -32,7 +32,8 @@
 
 // Need to link with Ws2_32.lib,
 // Mswsock.lib,
-// and Advapi32.lib ?
+// and Advapi32.lib for security and
+// registry calls?
 
 // #pragma comment (lib, "Ws2_32.lib")
 // #pragma comment (lib, "Mswsock.lib")
@@ -88,7 +89,7 @@ WSACleanup();
 
 
 
-void SocketsWin::closeSocket( Uint64 toClose )
+void SocketsWin::closeSocket( SocketCpp toClose )
 {
 if( toClose == 0 )
   return;
@@ -104,9 +105,10 @@ closesocket( toClose );
 
 
 
-Uint64 SocketsWin::openClient( const char* domain,
-                               const char* port,
-                               CharBuf& errorBuf )
+SocketCpp SocketsWin::openClient(
+                        const char* domain,
+                        const char* port,
+                        CharBuf& errorBuf )
 {
 // result is a linked list.
 // In Linux is it a pointer to a pointer?
@@ -157,7 +159,7 @@ if( status != 0 )
   }
 
 // SOCKET clientSocket = INVALID_SOCKET;
-Uint64 clientSocket = INVALID_SOCKET;
+SocketCpp clientSocket = INVALID_SOCKET;
 
 // Try the possible connections.
 Int32 count = 0;
@@ -171,6 +173,7 @@ for( ptr = result; ptr != nullptr;
     errorBuf.appendChars(
      "SocketWin too many sockets for connect.\n" );
 
+    freeaddrinfo( result );
     return 0;
     }
 
@@ -184,6 +187,7 @@ for( ptr = result; ptr != nullptr;
       "SocketWin no sockets left for connect.\n" );
 
     // WSAGetLastError());
+    freeaddrinfo( result );
     return 0;
     }
 
@@ -246,7 +250,7 @@ return clientSocket;
 
 
 
-Uint64 SocketsWin::openServer( const char* port,
+SocketCpp SocketsWin::openServer( const char* port,
                                CharBuf& errorBuf )
 {
 // Check the stats and hacking info for disallowed
@@ -275,11 +279,6 @@ hints.ai_flags = AI_PASSIVE; // Get the IP.
 
 // Port 443 for https.
 
-// htons() host to network short
-// htonl() host to network long
-// ntohs() network to host short
-// ntohl() network to host long
-
 // getaddrinfo is in ws2tcpip.h.
 
 // The domain can be "localhost".
@@ -306,7 +305,8 @@ errorBuf.appendChars(
          "Before opening socket.\n" );
 
 // SOCKET serverSocket = INVALID_SOCKET;
-Uint64 serverSocket = socket( result->ai_family,
+SocketCpp serverSocket = socket(
+                          result->ai_family,
                           result->ai_socktype,
                           result->ai_protocol );
 
@@ -316,32 +316,33 @@ if( serverSocket == INVALID_SOCKET )
     "SocketWin  server no sockets.\n" );
 
   // WSAGetLastError());
+  freeaddrinfo( result );
   return 0;
   }
 
 if( 0 != bind( serverSocket, result->ai_addr,
-                    Casting::U64ToI32(
-                    result->ai_addrlen )))
+               Casting::U64ToI32(
+               result->ai_addrlen )))
   {
   closeSocket( serverSocket );
   errorBuf.appendChars(
     "SocketWin  server bind error.\n" );
 
+  freeaddrinfo( result );
   return 0;
   }
 
 // The backlog could be several hundred in Windows.
-if( 0 != listen( serverSocket, 5 ))
+// What is it in Linux?
+if( 0 != listen( serverSocket, 20 ))
   {
   closeSocket( serverSocket );
   errorBuf.appendChars(
     "SocketWin  server listen error.\n" );
 
+  freeaddrinfo( result );
   return 0;
   }
-
-
-
 
 errorBuf.appendChars(
         "SocketWin server got socket.\n" );
@@ -379,12 +380,77 @@ return serverSocket;
 
 
 
+SocketCpp SocketsWin::acceptConnect(
+                         SocketCpp servSock,
+                         CharBuf& errorBuf )
+{
+struct sockaddr_storage remoteAddr;
+Int32 addrSize = sizeof( remoteAddr );
 
+/////////////
+// The new style static_cast won't work here
+// either.
+// static_cast<Int32>( x )
+
+#pragma clang diagnostic push
+
+#pragma clang diagnostic ignored "-Wold-style-cast"
+
+
+struct timeval tv;
+fd_set readfds;
+
+tv.tv_sec = 0;
+tv.tv_usec = 500000; // microseconds.
+
+FD_ZERO( &readfds );
+FD_SET( servSock, &readfds );
+
+// don't care about writefds and exceptfds:
+select( Casting::U64ToI32( servSock + 1 ),
+                 &readfds, nullptr,
+                 nullptr, &tv );
+
+if( FD_ISSET( servSock, &readfds ))
+  {
+  #pragma clang diagnostic push
+
+  #pragma clang diagnostic ignored "-Wold-style-cast"
+
+  SocketCpp acceptSock = accept( servSock,
+              (struct sockaddr *)&remoteAddr,
+              &addrSize );
+
+  #pragma clang diagnostic pop
+
+  // This causes the warning after the pop.
+  // accept( servSock,
+  //              (struct sockaddr *)&remoteAddr,
+  //              &addrSize );
+
+  if( acceptSock == INVALID_SOCKET )
+    {
+    errorBuf.appendChars(
+                "Accepted socket is invalid.\n" );
+    return 0;
+    }
+
+  errorBuf.appendChars(
+                "Accepted a socket.\n" );
+
+  return acceptSock;
+  }
+
+errorBuf.appendChars(
+                "No socket ready to accept.\n" );
+
+return 0;
+}
 
 
 
 Int32 SocketsWin::sendBuf(
-                   const Uint64 sendToSock,
+                   const SocketCpp sendToSock,
                    const CharBuf& sendBuf,
                    CharBuf& errorBuf )
 {

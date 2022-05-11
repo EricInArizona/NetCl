@@ -8,6 +8,4 @@ recentfile4	\Eric\Main\NetEC\SocketClient.h
 recentfile5	\Eric\Main\NetEC\SocketClient.cpp
 recentfile6	\Eric\Main\NetEC\SocketsWin.h
 recentfile7	\Eric\Main\NetEC\SocketsWin.cpp
-recentfile10	\Eric\Main\CppBase\Str.h
-recentfile8	\Eric\Main\CppBase\CharBuf.h
-recentfile9	\Eric\Main\CppBase\Casting.h
+recentfile8	\Eric\Main\CppBase\Casting.h

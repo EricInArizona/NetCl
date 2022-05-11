@@ -18,6 +18,7 @@
 // https://en.wikipedia.org/wiki/DNS_over_HTTPS
 
 
+// The SocketCpp type is in BasicTypes.h
 
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/CharBuf.h"
@@ -29,35 +30,30 @@ class SocketsWin
   {
   private:
   Int32 testForCopy = 123;
-  // Since this is global to the software, it
-  // stays running the whole time the software
-  // is running.
-  // Need Config files.
-  // Statistical data is kept here.
-  // And error data.
-  // And hacking attempt data.
-  // Keep IP addresses to not allow here.
 
   public:
   SocketsWin( void );
   SocketsWin( const SocketsWin &in );
   ~SocketsWin( void );
-  void closeSocket( Uint64 toClose );
-  // void getAddressInfo( void );
+  static void closeSocket( SocketCpp toClose );
 
-  Uint64 openClient( const char* domain,
-                     const char* port,
-                     CharBuf& errorBuf );
+  static SocketCpp openClient( const char* domain,
+                               const char* port,
+                               CharBuf& errorBuf );
 
-  Uint64 openServer( const char* port,
-                     CharBuf& errorBuf );
+  static SocketCpp openServer( const char* port,
+                               CharBuf& errorBuf );
 
-  Int32 sendBuf( const Uint64 sendToSock,
-                 const CharBuf& sendBuf,
-                 CharBuf& errorBuf );
+  static SocketCpp acceptConnect(
+                         SocketCpp servSock,
+                         CharBuf& errorBuf );
 
-  bool receiveBuf( const Uint64 recSock,
-                   CharBuf& recCharBuf,
-                   CharBuf& errorBuf );
+  static Int32 sendBuf( const SocketCpp sendToSock,
+                        const CharBuf& sendBuf,
+                        CharBuf& errorBuf );
+
+  static bool receiveBuf( const SocketCpp recSock,
+                          CharBuf& recCharBuf,
+                          CharBuf& errorBuf );
 
   };
