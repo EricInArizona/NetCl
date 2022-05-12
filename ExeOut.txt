@@ -1,10 +1,9 @@
 Programming by Eric Chauvin.
-Version date: 5/10/2022
+Version date: 5/12/2022
 
-Did not accept a socket.
-Opened a socket.
-Before opening socket.
-SocketWin server got socket.
-No socket ready to accept.
-Closed test socket.
+SocketWin getaddrinfo error.
+clientConnect() error.
+Host not found.
+Error is: 11001
+openClient returned zero.
 End of main app.

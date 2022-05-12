@@ -8,7 +8,12 @@
 
 
 #include "../CppBase/BasicTypes.h"
+// In Windows use the linker option to set the
+// stack size.
+
+// In Linux set the stack size with this:
 // #include "../LinuxApi/SetStack.h"
+
 #include "MainApp.h"
 
 

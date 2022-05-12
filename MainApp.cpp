@@ -12,6 +12,7 @@
 // #include "../LinuxApi/SetStack.h"
 #include "../CppBase/Casting.h"
 #include "../CppBase/Threads.h"
+
 #include "../WinApi/Signals.h"
 // #include "../LinuxApi/Signals.h"
 
@@ -38,7 +39,7 @@ int MainApp::mainLoop( void )
 {
 Int32 delay = 200; // milliseconds.
 const char* outFile =
-               "\\Eric\\Main\\NetEC\\ExeOut.txt";
+               "\\Eric\\Main\\NetCl\\ExeOut.txt";
 
 try
 {
@@ -113,7 +114,6 @@ void MainApp::testSockets( void )
 
 CharBuf showBuf;
 
-/*
 Uint64 testSocket = socketsWin.openClient(
                      "www.durangoherald.com",
                      "443", showBuf );
@@ -125,31 +125,6 @@ if( testSocket == 0 )
 
   return;
   }
-*/
-
-Uint64 testSocket = socketsWin.openServer(
-                            "443", showBuf );
-if( testSocket == 0 )
-  {
-  mainIO.appendCharBuf( showBuf );
-  mainIO.appendChars(
-              "openServer returned zero.\n" );
-
-  return;
-  }
-
-
-SocketCpp newConn = SocketsWin::acceptConnect(
-                         testSocket,
-                         showBuf );
-
-if( newConn == 0 )
-  {
-  mainIO.appendChars( "Did not accept a socket.\n" );
-  }
-
-mainIO.appendChars( "Opened a socket.\n" );
-mainIO.appendCharBuf( showBuf );
 
 socketsWin.closeSocket( testSocket );
 mainIO.appendChars( "Closed test socket.\n" );

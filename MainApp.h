@@ -21,7 +21,7 @@
 
 #include "../CppBase/BasicTypes.h"
 #include "../CppBase/FileIO.h"
-#include "SocketsWin.h"
+#include "../Sockets/SocketsWin.h"
 
 
 
@@ -41,7 +41,7 @@ class MainApp
   public:
   inline static const char* getVersionStr( void )
     {
-    return "5/10/2022";
+    return "5/12/2022";
     }
 
   // Int32 mainLoop( Int32 argc, char* argv[] );

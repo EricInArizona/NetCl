@@ -2,7 +2,7 @@
 
 rem 1> is standard out and 2> is standard error.
 
-cd \Eric\Main\NetEC
+cd \Eric\Main\NetCl
 
 rem @CommandLine.txt
 rem Use -v to see how it gets called.
@@ -32,10 +32,11 @@ rem \Eric\Main\LinuxApi\*.cpp
 
 rem -lWs2_32.lib
 rem -lwsock32.lib
-C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\CryptoBase\*.cpp \Eric\Main\WinApi\*.cpp -o NetEC.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lWs2_32.lib 2> Build.log
+C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\Sockets\*.cpp  \Eric\Main\CryptoBase\*.cpp \Eric\Main\WinApi\*.cpp -o NetCl.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lWs2_32.lib 2> Build.log
 
 rem Show macros:
 rem Over 54,000 macros defined.
+rem duplicates?
 rem C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\CryptoBase\*.cpp \Eric\Main\WinApi\*.cpp -E -dM -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast > Build.log
 
 
