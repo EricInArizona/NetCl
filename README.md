@@ -1,2 +1,2 @@
-# NetEC
-Networking with Sockets.
+# NetCl
+Networking client with Sockets.
