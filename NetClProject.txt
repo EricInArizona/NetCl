@@ -3,31 +3,7 @@ executablefile	\Eric\Main\NetCl\NetCl.exe
 projectdirectory	\Eric\Main\NetCL
 recentfile1	\Eric\Main\NetCl\MainApp.h
 recentfile2	\Eric\Main\Docs\Notes.txt
-recentfile3	\Eric\Main\NetCL\BuildProj.bat
-recentfile4	\Eric\Main\NetCL\MainApp.cpp
-recentfile5	\Eric\Main\Sockets\SocketsWin.h
-recentfile6	\Eric\Main\Sockets\SocketsWin.cpp
-recentfile7	
-recentfile8	
-recentfile9	
-recentfile10	
-recentfile11	
-recentfile12	
-recentfile13	
-recentfile14	
-recentfile15	
-recentfile16	
-recentfile17	
-recentfile18	
-recentfile19	
-recentfile20	
-recentfile21	
-recentfile22	
-recentfile23	
-recentfile24	
-recentfile25	
-recentfile26	
-recentfile27	
-recentfile28	
-recentfile29	
-recentfile30	
+recentfile3	\Eric\Main\NetCL\MainApp.cpp
+recentfile4	\Eric\Main\Sockets\SocketsApiWin.h
+recentfile5	\Eric\Main\Sockets\SocketsApiWin.cpp
+recentfile6	\Eric\Main\CppBase\CharBuf.h
