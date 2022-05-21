@@ -21,42 +21,21 @@
 #include "MainApp.h"
 
 
-// extern volatile Int32 gotSigFpe;
-
-/*
-void MainApp::checkSignals( void )
-{
-if( gotSigFpe > 0 )
-  throw "gotSigFpe > 0";
-
-}
-*/
-
-
-
 // int MainApp::mainLoop( int argc, char* argv[] )
 int MainApp::mainLoop( void )
 {
 Int32 delay = 200; // milliseconds.
-const char* outFile =
-               "\\Eric\\Main\\NetCl\\ExeOut.txt";
 
 try
 {
-StIO::putS( "See output at:" );
-StIO::putS( outFile );
-
-
 // Throws an exception if things are not right.
 BasicTypes::thingsAreRight();
 
 
-mainIO.appendChars(
-            "Programming by Eric Chauvin.\n" );
-
-mainIO.appendChars( "Version date: " );
-mainIO.appendChars( getVersionStr() );
-mainIO.appendChars( "\n\n" );
+StIO::putS( "Programming by Eric Chauvin." );
+StIO::printF( "Version date: " );
+StIO::putS( getVersionStr() );
+StIO::putS( " " );
 
 // For Linux:
 // Int32 stackSize = SetStack::getSize();
@@ -74,10 +53,7 @@ Signals::setupBadMemSignal();
 testSockets();
 
 
-mainIO.appendChars( "End of main app.\n" );
-
-//             mainIO.readAll( fileName );
-mainIO.writeAll( outFile );
+StIO::putS( "End of main app." );
 
 Threads::sleep( delay );
 
@@ -85,10 +61,8 @@ return 0;
 }
 catch( const char* in )
   {
-  mainIO.appendChars( "Exception in main loop.\n" );
-  mainIO.appendChars( in );
-  mainIO.appendChars( "\n" );
-  mainIO.writeAll( outFile );
+  StIO::putS( "Exception in main loop.\n" );
+  StIO::putS( in );
 
   Threads::sleep( delay );
   return 1;
@@ -99,8 +73,7 @@ catch( ... )
   const char* in = "An unknown exception"
                    " happened in the main loop.\n";
 
-  mainIO.appendChars( in );
-  mainIO.writeAll( outFile );
+  StIO::putS( in );
 
   Threads::sleep( delay );
   return 1;
@@ -110,22 +83,28 @@ catch( ... )
 
 void MainApp::testSockets( void )
 {
-// get some news for a test.
+CharBuf sendBuf;
+sendBuf.appendChars( "Hello. How are you today?\n" );
 
-CharBuf showBuf;
-
-Uint64 testSocket = socketsWin.openClient(
-                     "www.durangoherald.com",
-                     "443", showBuf );
+Uint64 testSocket = SocketsApi::connectClient(
+                    "127.0.0.1",
+                    // "www.durangoherald.com",
+                    "443" );
 if( testSocket == 0 )
   {
-  mainIO.appendCharBuf( showBuf );
-  mainIO.appendChars(
-              "openClient returned zero.\n" );
-
+  StIO::putS( "connectClient returned zero." );
   return;
   }
 
-socketsWin.closeSocket( testSocket );
-mainIO.appendChars( "Closed test socket.\n" );
+Int32 howMany = SocketsApi::sendBuf(
+                        testSocket, sendBuf );
+
+StIO::printF( "Sent " );
+StIO::printFD( howMany );
+StIO::printF( " bytes.\n" );
+
+Threads::sleep( 1000 * 5 );
+
+SocketsApi::closeSocket( testSocket );
+StIO::putS( "Closed test socket." );
 }

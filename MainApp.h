@@ -1,10 +1,6 @@
 // Copyright Eric Chauvin 2021 - 2022.
 
 
-// See https://ericinarizona.github.io/
-// For more information.
-
-
 // This is licensed under the GNU General
 // Public License (GPL).  It is the
 // same license that Linux has.
@@ -12,23 +8,23 @@
 
 
 
+// See https://ericinarizona.github.io/
+// For more information.
+
+
 #pragma once
 
 
-// I never use the C preprocessor except to use
-// #include statements.
-
-
 #include "../CppBase/BasicTypes.h"
-#include "../CppBase/FileIO.h"
-#include "../Sockets/SocketsWin.h"
+// #include "../CppBase/FileIO.h"
+#include "../Sockets/SocketsApiWin.h"
 
 
 
 class MainApp
   {
   private:
-  FileIO mainIO;
+  // FileIO mainIO;
 
   // The constructor does WSAStartup() and
   // the destructor does WSACleanup(). So the
@@ -36,12 +32,12 @@ class MainApp
   // this app.  Also statistical and other data
   // is kept for the life of the app.
 
-  SocketsWin socketsWin;
+  SocketsApi socketsApi;
 
   public:
   inline static const char* getVersionStr( void )
     {
-    return "5/12/2022";
+    return "5/21/2022";
     }
 
   // Int32 mainLoop( Int32 argc, char* argv[] );
