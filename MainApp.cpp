@@ -90,9 +90,9 @@ Uint64 testSocket = SocketsApi::connectClient(
                     "127.0.0.1",
                     // "www.durangoherald.com",
                     "443" );
-if( testSocket == 0 )
+if( testSocket == SocketsApi::InvalSock )
   {
-  StIO::putS( "connectClient returned zero." );
+  StIO::putS( "connectClient returned InvalSock." );
   return;
   }
 
