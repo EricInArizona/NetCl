@@ -90,11 +90,14 @@ Uint64 testSocket = SocketsApi::connectClient(
                     "127.0.0.1",
                     // "www.durangoherald.com",
                     "443" );
+
 if( testSocket == SocketsApi::InvalSock )
   {
   StIO::putS( "connectClient returned InvalSock." );
   return;
   }
+
+StIO::putS( "About to sendbuf." );
 
 Int32 howMany = SocketsApi::sendBuf(
                         testSocket, sendBuf );
