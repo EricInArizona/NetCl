@@ -6,8 +6,3 @@ recentfile2	\Eric\Main\Docs\Notes.txt
 recentfile3	\Eric\Main\NetCL\MainApp.cpp
 recentfile4	\Eric\Main\Sockets\SocketsApiWin.h
 recentfile5	\Eric\Main\Sockets\SocketsApiWin.cpp
-recentfile6	\Eric\Main\Docs\WinSock2Copy.h
-recentfile7	\Eric\Main\Docs\WS2tcpip.h
-recentfile8	\Eric\Main\Docs\winsock.h
-recentfile9	\Eric\Main\CppBase\CharBuf.h
-recentfile10	\Eric\Main\CppBase\StIO.h
