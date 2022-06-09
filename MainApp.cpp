@@ -83,13 +83,13 @@ catch( ... )
 
 void MainApp::testSockets( void )
 {
-CharBuf sendBuf;
-sendBuf.appendChars( "Hello. How are you today?\n" );
+Str toSend( "Hello. How are you today?\n" );
 
-Uint64 testSocket = SocketsApi::connectClient(
-                    "127.0.0.1",
-                    // "www.durangoherald.com",
-                    "443" );
+Str domain( "127.0.0.1" );
+Str port( "443" );
+Uint64 testSocket = socketsApi.connectClient(
+                    domain,
+                    port );
 
 if( testSocket == SocketsApi::InvalSock )
   {
@@ -97,17 +97,19 @@ if( testSocket == SocketsApi::InvalSock )
   return;
   }
 
-StIO::putS( "About to sendbuf." );
+StIO::putS( "About to send string." );
 
-Int32 howMany = SocketsApi::sendBuf(
-                        testSocket, sendBuf );
+if( !SocketsApi::sendStr( testSocket, toSend ))
+  {
+  StIO::putS( "Could not send the whole string." );
+  }
 
-StIO::printF( "Sent " );
-StIO::printFD( howMany );
-StIO::printF( " bytes.\n" );
+StIO::printF( "Sent string." );
+// StIO::printFD( howMany );
+// StIO::printF( " bytes.\n" );
 
 Threads::sleep( 1000 * 5 );
 
-SocketsApi::closeSocket( testSocket );
+socketsApi.closeSocket( testSocket );
 StIO::putS( "Closed test socket." );
 }

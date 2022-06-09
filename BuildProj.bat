@@ -15,24 +15,14 @@ rem Universal C Runtime
 
 rem C:\LLVM\bin\clang++ --help
 
-rem -MAP goes to main.map.
-
 rem -Weverything
 rem -Wall
 
-rem Don't use old style casting.
-rem -Wno-old-style-cast
-
 rem -Ofast
-
-rem Check MainApp.cpp to see where the exeout
-rem file is going to.
-
-rem \Eric\Main\LinuxApi\*.cpp
 
 rem -lWs2_32.lib
 rem -lwsock32.lib
-C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\Sockets\*.cpp  \Eric\Main\CryptoBase\*.cpp \Eric\Main\WinApi\*.cpp -o NetCl.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lWs2_32.lib 2> Build.log
+C:\LLVM\bin\clang++ *.cpp \Eric\Main\CppBase\*.cpp \Eric\Main\Network\*.cpp  \Eric\Main\CryptoBase\*.cpp \Eric\Main\WinApi\*.cpp -o NetCl.exe -Weverything -Wno-c++98-compat-pedantic -ftrapv -Ofast -Wl,-MAP -Wl,-STACK:10000000 -lWs2_32.lib 2> Build.log
 
 rem Show macros:
 rem Over 54,000 macros defined.
