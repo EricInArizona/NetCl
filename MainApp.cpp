@@ -7,6 +7,8 @@
 // https://www.gnu.org/licenses/gpl-3.0.html
 
 
+#include "MainApp.h"
+
 #include "../CppBase/StIO.h"
 #include "../CppBase/Str.h"
 // #include "../LinuxApi/SetStack.h"
@@ -16,9 +18,8 @@
 #include "../WinApi/Signals.h"
 // #include "../LinuxApi/Signals.h"
 
+#include "../Network/NetClient.h"
 
-
-#include "MainApp.h"
 
 
 // int MainApp::mainLoop( int argc, char* argv[] )
@@ -87,19 +88,20 @@ Str toSend( "Hello. How are you today?\n" );
 
 Str domain( "127.0.0.1" );
 Str port( "443" );
-Uint64 testSocket = socketsApi.connectClient(
-                    domain,
-                    port );
 
-if( testSocket == SocketsApi::InvalSock )
+NetClient client;
+
+if( !client.connect( domain,
+                     port ))
   {
-  StIO::putS( "connectClient returned InvalSock." );
+  StIO::putS(
+        "client.connect() returned false." );
   return;
   }
 
 StIO::putS( "About to send string." );
 
-if( !SocketsApi::sendStr( testSocket, toSend ))
+if( !client.sendStr( toSend ))
   {
   StIO::putS( "Could not send the whole string." );
   }
@@ -110,6 +112,6 @@ StIO::printF( "Sent string." );
 
 Threads::sleep( 1000 * 5 );
 
-socketsApi.closeSocket( testSocket );
+client.closeSocket();
 StIO::putS( "Closed test socket." );
 }
