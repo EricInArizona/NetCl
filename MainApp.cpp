@@ -10,10 +10,17 @@
 #include "MainApp.h"
 
 #include "../CppBase/StIO.h"
-#include "../CppBase/Str.h"
+#include "../CppBase/FileIO.h"
 // #include "../LinuxApi/SetStack.h"
 #include "../CppBase/Casting.h"
 #include "../CppBase/Threads.h"
+#include "../CryptoBase/Sha256.h"
+#include "../CryptoBase/Base64.h"
+
+#include "../CryptoBase/Integer56.h"
+#include "../CryptoBase/Integer112.h"
+
+#include "../CryptoBase/Aes.h"
 
 #include "../WinApi/Signals.h"
 // #include "../LinuxApi/Signals.h"
@@ -51,7 +58,33 @@ Signals::setupIllegalOpSignal();
 Signals::setupBadMemSignal();
 
 
-testSockets();
+StIO::putS( "Testing AES." );
+Aes aes;
+aes.encryptTest();
+
+
+// testSockets();
+
+// Integer56 test56;
+// test56.setFromULong( 17 );
+
+// StIO::putS( "Testing Integer56." );
+// StIO::printFUD( test56.getAsULong() );
+// StIO::putLF();
+
+// Uint64 modVal = test56.getMod64( 13 );
+// StIO::printF( "Mod val: " );
+// StIO::printFUD( modVal );
+// StIO::putLF();
+
+
+StIO::putS( "End of the test." );
+
+
+
+// CharBuf charBuf;
+// charBuf.testBasics();
+
 
 
 StIO::putS( "End of main app." );
@@ -84,15 +117,12 @@ catch( ... )
 
 void MainApp::testSockets( void )
 {
-Str toSend( "Hello. How are you today?\n" );
-
-Str domain( "127.0.0.1" );
-Str port( "443" );
+CharBuf toSend( "Hello. How are you today?\n" );
 
 NetClient client;
 
-if( !client.connect( domain,
-                     port ))
+if( !client.connect( "127.0.0.1",
+                     "443" ))
   {
   StIO::putS(
         "client.connect() returned false." );
@@ -101,12 +131,12 @@ if( !client.connect( domain,
 
 StIO::putS( "About to send string." );
 
-if( !client.sendStr( toSend ))
+if( !client.sendCharBuf( toSend ))
   {
-  StIO::putS( "Could not send the whole string." );
+  StIO::putS( "Could not send the whole cBuf." );
   }
 
-StIO::printF( "Sent string." );
+StIO::printF( "Sent cBuf." );
 // StIO::printFD( howMany );
 // StIO::printF( " bytes.\n" );
 
